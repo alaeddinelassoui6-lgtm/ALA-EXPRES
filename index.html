@@ -3,68 +3,183 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ALA EXPRESS</title>
+  <meta name="theme-color" content="#087f5b">
+  <title>ALA EXPRESS | ألا إكسبريس</title>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-      background: #f4f6f8;
+      background: #f1f5f4;
       margin: 0;
-      padding: 20px;
+      padding: 15px;
+      color: #222;
     }
+
     header {
-      background: #087f5b;
+      background: linear-gradient(135deg, #087f5b, #064e3b);
       color: white;
-      padding: 25px;
-      border-radius: 15px;
+      text-align: center;
+      padding: 28px 15px;
+      border-radius: 18px;
     }
+
+    header h1 {
+      font-size: 30px;
+      margin: 0 0 12px;
+    }
+
+    header p {
+      font-size: 16px;
+      line-height: 1.8;
+      margin: 5px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      background: white;
+      color: #087f5b;
+      padding: 8px 15px;
+      border-radius: 25px;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    .section-title {
+      text-align: center;
+      margin: 25px 0 15px;
+      color: #075c45;
+    }
+
     .card {
       background: white;
-      margin: 15px 0;
+      margin: 14px 0;
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 15px;
+      box-shadow: 0 3px 10px #0000000d;
     }
-    button {
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 21px;
+    }
+
+    .card p {
+      line-height: 1.8;
+      color: #555;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
       background: #087f5b;
       color: white;
+      text-decoration: none;
       border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
+      padding: 14px;
+      border-radius: 10px;
       font-size: 17px;
+      text-align: center;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #065f46;
+    }
+
+    .contact {
+      background: #e0f2e9;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 5px;
+      color: #666;
+      font-size: 14px;
     }
   </style>
 </head>
+
 <body>
+
   <header>
     <h1>ALA EXPRESS 🚚</h1>
-    <p>خدمات التوصيل ومتجر القناعة للألبسة النسائية</p>
+    <p>ألا إكسبريس لخدمات التوصيل</p>
+    <p>خدمة سريعة وآمنة وبأسعار مناسبة</p>
+    <div class="badge">نحن في خدمتكم</div>
   </header>
+
+  <h2 class="section-title">🛍️ خدماتنا</h2>
 
   <div class="card">
     <h2>📦 إرسال طرد</h2>
-    <p>أرسل طردك بسهولة وأمان.</p>
-    <button onclick="alert('قريبًا: خدمة إرسال الطرود')">اطلب الخدمة</button>
+    <p>هل تريد إرسال طرد أو غرض إلى شخص آخر؟ تواصل معنا لطلب الخدمة.</p>
+    <button class="btn" onclick="sendRequest('أريد إرسال طرد')">
+      اطلب إرسال طرد
+    </button>
   </div>
 
   <div class="card">
-    <h2>🛍️ شراء وتوصيل</h2>
-    <p>اطلب منتجك ودعه يصل إلى باب منزلك.</p>
-    <button onclick="alert('قريبًا: خدمة شراء المنتجات')">اطلب الآن</button>
+    <h2>🛒 شراء المنتجات</h2>
+    <p>تريد شراء منتج من محل أو من شخص آخر؟ تواصل معنا لمساعدتك في الطلب والتوصيل.</p>
+    <button class="btn" onclick="sendRequest('أريد شراء منتج وتوصيله')">
+      اطلب شراء منتج
+    </button>
   </div>
 
   <div class="card">
     <h2>🏪 خدمات التجار</h2>
-    <p>خدمات توصيل الطرود والطلبات للتجار.</p>
+    <p>أصحاب المحلات والتجار، يمكنكم التواصل معنا لتوصيل الطلبات والطرود إلى زبائنكم.</p>
+    <button class="btn" onclick="sendRequest('أنا تاجر وأريد خدمة التوصيل')">
+      أطلب خدمة التوصيل
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>👗 متجر القناعة للألبسة النسائية</h2>
+    <p>اكتشفوا منتجات متجر القناعة للألبسة النسائية، واسألونا عن المنتجات المتوفرة.</p>
+    <button class="btn" onclick="sendRequest('أريد الاستفسار عن ملابس متجر القناعة')">
+      استفسر عن المنتجات
+    </button>
+  </div>
+
+  <div class="contact">
+    <h2>📞 اطلب خدمتك الآن</h2>
+    <p>اضغط على الزر للتواصل معنا عبر واتساب.</p>
+    <button class="btn" onclick="sendRequest('السلام عليكم، أريد الاستفسار عن خدمات ALA EXPRESS')">
+      تواصل عبر واتساب
+    </button>
   </div>
 
   <footer>
-    <p>ALA EXPRESS — السرعة والثقة في خدمتكم</p>
+    <p>ALA EXPRESS 🚚</p>
+    <p>السرعة والثقة في خدمتكم ❤️</p>
+    <p>© 2026 جميع الحقوق محفوظة</p>
   </footer>
+
+  <script>
+    function sendRequest(message) {
+      const phone = "ضع_رقم_هاتفك_هنا";
+      
+      if (phone === "ضع_رقم_هاتفك_هنا") {
+        alert("مرحبًا بك في ALA EXPRESS! يجب إضافة رقم واتساب الخاص بصاحب التطبيق لتفعيل الطلبات.");
+        return;
+      }
+
+      const url = "https://wa.me/" + phone +
+        "?text=" + encodeURIComponent(message);
+
+      window.open(url, "_blank");
+    }
+  </script>
+
 </body>
 </html>
-<body>
-<header>
-<h1>ALA EXPRESS 🚚</h1>
-<p>خدمات التوصيل في خدمتكم</p>
-<p>سريع وآمن وبأسعار مناسبة</p>
-</header>
