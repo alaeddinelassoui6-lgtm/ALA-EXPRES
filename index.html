@@ -2,240 +2,172 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#087f5b">
 <meta name="description" content="ALA EXPRESS - خدمات التوصيل السريع والآمن">
 <title>ALA EXPRESS</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f3f6f5;
-  color: #222;
-}
-
-header {
-  background: #087f5b;
-  color: white;
-  text-align: center;
-  padding: 25px 12px;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 30px;
-  direction: ltr;
-}
-
-header p {
-  margin: 10px 0 0;
-}
-
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 15px;
-}
-
-.card {
-  background: white;
-  padding: 18px;
-  margin: 15px 0;
-  border-radius: 14px;
-  box-shadow: 0 3px 12px #00000010;
-}
-
-h2 {
-  color: #087f5b;
-  font-size: 20px;
-}
-
-label {
-  display: block;
-  margin: 12px 0 6px;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-  background: white;
-  font-family: Arial, sans-serif;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  background: #087f5b;
-  color: white;
-  border: 0;
-  border-radius: 9px;
-  font-size: 17px;
-  font-weight: bold;
-  margin-top: 15px;
-  cursor: pointer;
-}
-
-button:active {
-  opacity: .8;
-}
-
-.service {
-  background: #e7f5ef;
-  padding: 12px;
-  border-radius: 8px;
-  margin: 8px 0;
-}
-
-.notice {
-  background: #fff8e1;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  color: #666;
-  font-size: 13px;
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f7f5;color:#222;line-height:1.7}
+header{background:linear-gradient(135deg,#064e3b,#087f5b);color:white;text-align:center;padding:30px 15px}
+h1{direction:ltr;font-size:35px;margin:0;letter-spacing:1px}
+header p{margin:6px 0}
+.container{max-width:650px;margin:auto;padding:14px}
+.card{background:white;padding:18px;margin:14px 0;border-radius:15px;box-shadow:0 3px 14px #0000000d}
+h2{color:#087f5b;font-size:20px;margin-top:0}
+.service{background:#e7f5ef;padding:12px;border-radius:9px;margin:8px 0}
+label{display:block;margin:12px 0 5px;font-weight:bold}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px;background:white;font-family:Arial,sans-serif}
+button{width:100%;padding:14px;background:#087f5b;color:white;border:0;border-radius:9px;font-size:17px;font-weight:bold;margin-top:15px}
+button:active{opacity:.8}
+.notice{background:#fff6d8;padding:12px;border-radius:9px;font-size:13px}
+.result{display:none;background:#e7f5ef;padding:14px;border-radius:10px;margin-top:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+footer{text-align:center;padding:20px;color:#666;font-size:13px}
 </style>
 </head>
 
 <body>
-
 <header>
-  <h1>ALA EXPRESS</h1>
-  <p>خدمات التوصيل السريع والآمن</p>
-  <p>نوصلولك وين ما تكون 🚚</p>
+<h1>ALA EXPRESS</h1>
+<p>خدمات التوصيل السريع والآمن 🚚</p>
+<p>نوصلولك وين ما تكون</p>
 </header>
 
-<div class="container">
+<main class="container">
 
-  <div class="card">
-    <h2>🚚 خدماتنا</h2>
-    <div class="service">📦 توصيل الطلبيات والمشتريات</div>
-    <div class="service">🛍️ شراء المنتجات من المحلات والأسواق</div>
-    <div class="service">🤝 خدمات التوصيل للتجار والأفراد</div>
-    <div class="service">⚡ السرعة والأمان وأسعار مناسبة</div>
-  </div>
+<section class="card">
+<h2>🚚 خدماتنا</h2>
+<div class="service">📦 توصيل الطلبيات والمشتريات</div>
+<div class="service">🛍️ شراء المنتجات من المحلات والأسواق</div>
+<div class="service">🤝 التوصيل للتجار والأفراد</div>
+<div class="service">⚡ السرعة والأمان وخدمة موثوقة</div>
+</section>
 
-  <div class="card">
-    <h2>📍 مناطق التوصيل</h2>
-    <p>اختار المنطقة تاعك وشوف إمكانية التوصيل.</p>
+<section class="card">
+<h2>📍 مناطق التوصيل</h2>
+<label for="zone">اختر منطقة التوصيل *</label>
+<select id="zone" required>
+<option value="">اختر المنطقة</option>
+<option>تمالوس</option>
+<option>القل وجميع القرى والمداشر</option>
+<option>كركرة</option>
+<option>بين الويدان</option>
+<option>حروش</option>
+<option>مزغيش</option>
+<option>أم الطوب</option>
+<option>الجمالة</option>
+<option>بارون</option>
+<option>البياطة</option>
+<option>منطقة أخرى - التأكيد مطلوب</option>
+</select>
+</section>
 
-    <label for="zone">منطقة التوصيل</label>
-    <select id="zone" required>
-      <option value="">اختر المنطقة</option>
-      <option>تمالوس</option>
-      <option>القل</option>
-      <option>كركرة</option>
-      <option>بين الويدان</option>
-      <option>حروش</option>
-      <option>مزغيش</option>
-      <option>أم الطوب</option>
-      <option>الجمالة</option>
-      <option>بارون</option>
-      <option>البياطة</option>
-    </select>
-  </div>
+<section class="card">
+<h2>📝 اطلب خدمة التوصيل</h2>
+<form id="orderForm">
 
-  <div class="card">
-    <h2>📝 اطلب خدمة التوصيل</h2>
+<label for="name">الاسم الكامل *</label>
+<input id="name" required maxlength="100" placeholder="اكتب اسمك">
 
-    <form id="orderForm">
+<label for="phone">رقم الهاتف *</label>
+<input id="phone" type="tel" inputmode="tel" required placeholder="رقم هاتفك">
 
-      <label for="name">الاسم الكامل</label>
-      <input id="name" type="text" placeholder="اكتب اسمك" required>
+<label for="pickup">مكان استلام الطلب *</label>
+<input id="pickup" required placeholder="اسم المحل أو عنوان الاستلام">
 
-      <label for="phone">رقم الهاتف</label>
-      <input id="phone" type="tel" placeholder="05 أو 06 أو 07" required>
+<label for="address">عنوان التوصيل بالتفصيل *</label>
+<input id="address" required placeholder="البلدية والحي والعنوان">
 
-      <label for="from">مكان الاستلام</label>
-      <input id="from" type="text" placeholder="من أين نستلم الطلب؟" required>
+<label for="service">نوع الخدمة *</label>
+<select id="service" required>
+<option value="">اختر الخدمة</option>
+<option>توصيل طلبية</option>
+<option>شراء من المحلات</option>
+<option>إرسال غرض أو طرد</option>
+<option>توصيل للتجار</option>
+<option>خدمة أخرى</option>
+</select>
 
-      <label for="to">مكان التوصيل بالتفصيل</label>
-      <input id="to" type="text" placeholder="العنوان الذي تريد التوصيل إليه" required>
+<label for="details">تفاصيل إضافية</label>
+<textarea id="details" rows="3" placeholder="تفاصيل طلبك (اختياري)"></textarea>
 
-      <label for="service">نوع الخدمة</label>
-      <select id="service">
-        <option>توصيل طلبية</option>
-        <option>شراء من المحلات</option>
-        <option>إرسال غرض</option>
-        <option>خدمة للتجار</option>
-        <option>خدمة أخرى</option>
-      </select>
+<button type="submit">تحضير طلب التوصيل</button>
+</form>
 
-      <label for="details">تفاصيل إضافية</label>
-      <textarea id="details" rows="3" placeholder="اكتب تفاصيل طلبك هنا"></textarea>
-
-      <button type="submit">تأكيد طلب التوصيل</button>
-
-    </form>
-
-    <p class="notice">
-      ملاحظة: هذه نسخة تجريبية. يتم التحقق من المعلومات وتجهيز الطلب على الهاتف فقط، ولا يُرسل الطلب إلى شركة التوصيل في هذه المرحلة.
-    </p>
-  </div>
-
-  <div class="card">
-    <h2>🕘 أوقات العمل</h2>
-    <p>نستقبل الطلبات طوال اليوم.</p>
-    <p>ساعات التوصيل: من 09:00 صباحًا إلى 00:00 ليلًا.</p>
-  </div>
-
+<div id="result" class="result">
+<strong>تفاصيل طلبك:</strong>
+<p id="summary"></p>
+<button type="button" id="copyBtn">نسخ تفاصيل الطلب</button>
 </div>
 
+<p class="notice">
+تنبيه: هذه نسخة تجريبية. تحضير الطلب لا يعني إرساله إلينا؛ يمكنك نسخ التفاصيل وإرسالها يدويًا.
+</p>
+</section>
+
+<section class="card">
+<h2>🕘 أوقات الخدمة</h2>
+<p>نستقبل الاستفسارات طوال اليوم.</p>
+<p>ساعات التوصيل: من 09:00 صباحًا إلى 00:00 ليلًا.</p>
+</section>
+
+</main>
+
 <footer>
-  ALA EXPRESS © 2026<br>
-  خدمتكم بكل ثقة وأمان ❤️
+ALA EXPRESS © 2026<br>
+خدمتكم بكل ثقة وأمان ❤️
 </footer>
 
 <script>
-document.getElementById("orderForm").addEventListener("submit", function(event) {
-  event.preventDefault();
+let orderText = "";
 
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
+document.getElementById("orderForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
   const zone = document.getElementById("zone").value;
-  const from = document.getElementById("from").value.trim();
-  const to = document.getElementById("to").value.trim();
-  const service = document.getElementById("service").value;
-  const details = document.getElementById("details").value.trim();
-
-  if (!name || !phone || !zone || !from || !to) {
-    alert("من فضلك أكمل جميع المعلومات المطلوبة.");
+  if (!zone) {
+    alert("يرجى اختيار منطقة التوصيل.");
+    document.getElementById("zone").focus();
     return;
   }
 
-  const order = {
-    name: name,
-    phone: phone,
-    zone: zone,
-    from: from,
-    to: to,
-    service: service,
-    details: details
-  };
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const pickup = document.getElementById("pickup").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const service = document.getElementById("service").value;
+  const details = document.getElementById("details").value.trim();
 
+  orderText =
+    "طلب جديد - ALA EXPRESS\n" +
+    "الاسم: " + name + "\n" +
+    "الهاتف: " + phone + "\n" +
+    "المنطقة: " + zone + "\n" +
+    "مكان الاستلام: " + pickup + "\n" +
+    "عنوان التوصيل: " + address + "\n" +
+    "الخدمة: " + service + "\n" +
+    "التفاصيل: " + (details || "لا توجد");
+
+  document.getElementById("summary").textContent = orderText;
+  document.getElementById("result").style.display = "block";
+  document.getElementById("result").scrollIntoView({behavior:"smooth"});
+});
+
+document.getElementById("copyBtn").addEventListener("click", async function() {
   try {
-    localStorage.setItem("alaExpressTestOrder", JSON.stringify(order));
-    alert("تم تسجيل الطلب على هذا الجهاز بنجاح في النسخة التجريبية.");
-    this.reset();
-  } catch (error) {
-    alert("تعذر حفظ الطلب على هذا الجهاز. يمكنك تجربة المتصفح مرة أخرى.");
+    await navigator.clipboard.writeText(orderText);
+    alert("تم نسخ تفاصيل الطلب. يمكنك إرسالها يدويًا.");
+  } catch (err) {
+    const area = document.createElement("textarea");
+    area.value = orderText;
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand("copy");
+    area.remove();
+    alert("تم نسخ التفاصيل إن أمكن. إذا لم تنجح العملية، حدّد النص الظاهر وانسخه.");
   }
 });
 </script>
-
 </body>
 </html>
