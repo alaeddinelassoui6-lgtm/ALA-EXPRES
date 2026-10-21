@@ -120,53 +120,90 @@ ALA EXPRESS © 2026<br>
 </footer>
 
 <script>
-let orderText = "";
+  let orderText = "";
 
-document.getElementById("orderForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+document.getElementById("orderForm").addEventListener("submit", async function(e) {
+e.preventDefault();
 
-  const zone = document.getElementById("zone").value;
-  if (!zone) {
-    alert("يرجى اختيار منطقة التوصيل.");
-    document.getElementById("zone").focus();
-    return;
-  }
+const zone = document.getElementById("zone").value;
+const name = document.getElementById("name").value.trim();
+const phone = document.getElementById("phone").value.trim();
+const pickup = document.getElementById("pickup").value.trim();
+const address = document.getElementById("address").value.trim();
+const service = document.getElementById("service").value;
+const details = document.getElementById("details").value.trim();
 
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const pickup = document.getElementById("pickup").value.trim();
-  const address = document.getElementById("address").value.trim();
-  const service = document.getElementById("service").value;
-  const details = document.getElementById("details").value.trim();
+if (!zone) {
+alert("يرجى اختيار منطقة التوصيل.");
+return;
+}
 
-  orderText =
-    "طلب جديد - ALA EXPRESS\n" +
-    "الاسم: " + name + "\n" +
-    "الهاتف: " + phone + "\n" +
-    "المنطقة: " + zone + "\n" +
-    "مكان الاستلام: " + pickup + "\n" +
-    "عنوان التوصيل: " + address + "\n" +
-    "الخدمة: " + service + "\n" +
-    "التفاصيل: " + (details || "لا توجد");
+const button = this.querySelector('button[type="submit"]');
 
-  document.getElementById("summary").textContent = orderText;
-  document.getElementById("result").style.display = "block";
-  document.getElementById("result").scrollIntoView({behavior:"smooth"});
+if (button) {
+button.disabled = true;
+button.textContent = "جارٍ إرسال الطلب...";
+}
+
+try {
+const response = await fetch(
+"https://iqwabjdyshtvhnukylta.supabase.co/rest/v1/commandes",
+{
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+"apikey": "sb_publishable_pdCkpWQBZyrK_0loE6T7kw_80dH0SzB",
+"Authorization": "Bearer sb_publishable_pdCkpWQBZyrK_0loE6T7kw_80dH0SzB",
+"Prefer": "return=minimal"
+},
+body: JSON.stringify({
+nom_client: name,
+telephone: phone,
+adresse: address,
+produit: service + " | المنطقة: " + zone + " | الاستلام: " + pickup + " | التفاصيل: " + (details || "لا توجد"),
+statut: "جديد"
+})
+}
+);
+
+if (!response.ok) {
+  throw new Error(await response.text());
+}
+
+orderText =
+  "طلب جديد - ALA EXPRESS\n" +
+  "الاسم: " + name + "\n" +
+  "الهاتف: " + phone + "\n" +
+  "المنطقة: " + zone + "\n" +
+  "مكان الاستلام: " + pickup + "\n" +
+  "عنوان التوصيل: " + address + "\n" +
+  "الخدمة: " + service + "\n" +
+  "التفاصيل: " + (details || "لا توجد");
+
+document.getElementById("summary").textContent = orderText;
+document.getElementById("result").style.display = "block";
+document.getElementById("result").scrollIntoView({behavior:"smooth"});
+
+alert("تم تسجيل طلبك بنجاح!");
+
+} catch (error) {
+console.error(error);
+alert("تعذر حفظ الطلب. قد نحتاج إلى ضبط صلاحيات قاعدة البيانات.");
+} finally {
+if (button) {
+button.disabled = false;
+button.textContent = "إرسال الطلب";
+}
+}
 });
 
 document.getElementById("copyBtn").addEventListener("click", async function() {
-  try {
-    await navigator.clipboard.writeText(orderText);
-    alert("تم نسخ تفاصيل الطلب. يمكنك إرسالها يدويًا.");
-  } catch (err) {
-    const area = document.createElement("textarea");
-    area.value = orderText;
-    document.body.appendChild(area);
-    area.select();
-    document.execCommand("copy");
-    area.remove();
-    alert("تم نسخ التفاصيل إن أمكن. إذا لم تنجح العملية، حدّد النص الظاهر وانسخه.");
-  }
+try {
+await navigator.clipboard.writeText(orderText);
+alert("تم نسخ تفاصيل الطلب.");
+} catch (error) {
+alert("يمكنك تحديد تفاصيل الطلب ونسخها يدويًا.");
+}
 });
 </script>
 </body>
