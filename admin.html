@@ -1,97 +1,283 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111111">
-  <title>ALA EXPRESS - لوحة الإدارة</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 20px;
-      background: #111;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
-    .container { max-width: 900px; margin: auto; }
-    header {
-      text-align: center;
-      padding: 24px 10px;
-      border-bottom: 2px solid #c9a227;
-    }
-    h1 { color: #d6b54a; margin: 0 0 10px; }
-    .card {
-      background: #1d1d1d;
-      border: 1px solid #393939;
-      border-radius: 12px;
-      padding: 18px;
-      margin-top: 20px;
-    }
-    .notice {
-      color: #f1d77a;
-      line-height: 1.8;
-    }
-    a, button {
-      display: inline-block;
-      background: #c9a227;
-      color: #111;
-      padding: 12px 18px;
-      border: 0;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    .secondary { background: #333; color: #fff; }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #555;
-      background: #111;
-      color: #fff;
-    }
-    footer {
-      text-align: center;
-      color: #aaa;
-      margin-top: 30px;
-      font-size: 13px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111111">
+<title>ALA EXPRESS - لوحة الإدارة</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;padding:16px;background:#111;color:#fff;
+  font-family:Arial,sans-serif
+}
+.container{max-width:1000px;margin:auto}
+header{text-align:center;padding:22px;border-bottom:2px solid #c9a227}
+h1,h2{color:#d6b54a}
+.card{
+  background:#1d1d1d;border:1px solid #393939;
+  border-radius:12px;padding:18px;margin-top:18px
+}
+input,select{
+  display:block;width:100%;padding:12px;margin:10px 0;
+  border-radius:8px;border:1px solid #555;
+  background:#111;color:#fff;font-size:16px
+}
+button,a{
+  display:inline-block;padding:12px 16px;margin:5px 0;
+  border:0;border-radius:8px;background:#c9a227;
+  color:#111;font-weight:bold;text-decoration:none;cursor:pointer
+}
+.secondary{background:#333;color:#fff}
+.notice{line-height:1.8;color:#f1d77a}
+.order{
+  background:#292929;border:1px solid #555;
+  border-radius:10px;padding:15px;margin:12px 0;
+  overflow-wrap:anywhere
+}
+.order p{line-height:1.7;margin:7px 0}
+.status{color:#f1d77a;font-weight:bold}
+.small{color:#bbb;font-size:13px}
+.hidden{display:none}
+#message{line-height:1.8}
+footer{text-align:center;color:#aaa;margin:25px}
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <header>
-      <h1>ALA EXPRESS</h1>
-      <p>لوحة إدارة طلبات التوصيل 🚚</p>
-    </header>
+<div class="container">
 
-    <section class="card">
-      <h2>مرحبًا بك في لوحة الإدارة</h2>
-      <p class="notice">
-        هذه الصفحة مخصصة لإدارة طلبات ALA EXPRESS.
-        سنربطها بقاعدة البيانات بعد إعداد تسجيل دخول آمن
-        وصلاحيات خاصة بالمسؤول.
-      </p>
-      <p>حالة لوحة الإدارة: <strong>قيد الإعداد</strong></p>
-    </section>
+<header>
+  <h1>ALA EXPRESS 🚚</h1>
+  <p>لوحة إدارة طلبات التوصيل</p>
+</header>
 
-    <section class="card">
-      <h3>طلبات الزبائن</h3>
-      <p>لن تظهر الطلبات هنا حتى نكمل الربط الآمن بقاعدة البيانات.</p>
-      <a href="https://supabase.com/dashboard/project/iqwabjdyshtvhnukylta/editor/17620?schema=public&sort=created_at%3Adesc">
-        فتح جدول الطلبات
-      </a>
-      <br>
-      <a class="secondary" href="https://alaeddinelassoui6-lgtm.github.io/ALA-EXPRES/">
-        العودة إلى تطبيق الزبائن
-      </a>
-    </section>
+<section class="card" id="loginBox">
+  <h2>🔐 تسجيل دخول المدير</h2>
+  <p class="notice">سجّل الدخول بالبريد الإلكتروني وكلمة المرور التي أنشأتهما في Supabase.</p>
 
-    <footer>ALA EXPRESS © 2026</footer>
-  </div>
+  <form id="loginForm">
+    <input id="email" type="email" placeholder="البريد الإلكتروني" required autocomplete="username">
+    <input id="password" type="password" placeholder="كلمة المرور" required autocomplete="current-password">
+    <button type="submit">تسجيل الدخول</button>
+  </form>
+  <p id="loginMessage" role="status"></p>
+</section>
+
+<section class="card hidden" id="dashboard">
+  <h2>📦 طلبات الزبائن</h2>
+  <p id="welcome"></p>
+  <button id="refreshBtn">تحديث الطلبات</button>
+  <button id="logoutBtn" class="secondary">تسجيل الخروج</button>
+  <p id="message" role="status">جارٍ تحميل الطلبات...</p>
+  <div id="orders"></div>
+</section>
+
+<footer>ALA EXPRESS © 2026</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://iqwabjdyshtvhnukylta.supabase.co";
+const SUPABASE_KEY = "sb_publishable_pdCkpWQBZyrK_0loE6T7kw_80dH0SzB";
+
+const ADMIN_UID = "7a5e085a-36c8-4e47-af5e-baa0baa6ca66";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const loginBox = document.getElementById("loginBox");
+const dashboard = document.getElementById("dashboard");
+const loginMessage = document.getElementById("loginMessage");
+const message = document.getElementById("message");
+const ordersBox = document.getElementById("orders");
+
+function showLogin() {
+  loginBox.classList.remove("hidden");
+  dashboard.classList.add("hidden");
+}
+
+function showDashboard(user) {
+  loginBox.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+  document.getElementById("welcome").textContent =
+    "مرحبًا بك في إدارة ALA EXPRESS";
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, function(c) {
+    return {
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[c];
+  });
+}
+
+function formatDate(value) {
+  if (!value) return "غير محدد";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? escapeHTML(value)
+    : date.toLocaleString("ar-DZ");
+}
+
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  loginMessage.textContent = "جارٍ تسجيل الدخول...";
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  const { data, error } = await db.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    loginMessage.textContent =
+      "تعذّر تسجيل الدخول. تحقق من البريد وكلمة المرور ثم أعد المحاولة.";
+    return;
+  }
+
+  if (data.user.id !== ADMIN_UID) {
+    await db.auth.signOut();
+    loginMessage.textContent =
+      "هذا الحساب غير مخوّل للدخول إلى لوحة الإدارة.";
+    return;
+  }
+
+  loginMessage.textContent = "";
+  showDashboard(data.user);
+  await loadOrders();
+});
+
+async function loadOrders() {
+  message.textContent = "جارٍ تحميل الطلبات...";
+  ordersBox.replaceChildren();
+
+  const { data: { user }, error: authError } = await db.auth.getUser();
+
+  if (authError || !user || user.id !== ADMIN_UID) {
+    message.textContent = "انتهت الجلسة أو لا تملك صلاحية الإدارة. سجّل الدخول مجددًا.";
+    showLogin();
+    return;
+  }
+
+  const { data, error } = await db
+    .from("commandes")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    message.textContent =
+      "تعذّر تحميل الطلبات. تحقق من اتصال الإنترنت وصلاحيات قاعدة البيانات.";
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    message.textContent = "لا توجد طلبات حتى الآن.";
+    return;
+  }
+
+  message.textContent = "عدد الطلبات: " + data.length;
+
+  data.forEach(function(order) {
+    const card = document.createElement("article");
+    card.className = "order";
+
+    card.innerHTML = `
+      <h3>📦 الطلب رقم ${escapeHTML(order.id)}</h3>
+      <p><strong>الزبون:</strong> ${escapeHTML(order.nom_client)}</p>
+      <p><strong>الهاتف:</strong> ${escapeHTML(order.telephone)}</p>
+      <p><strong>المنتج أو الطلب:</strong> ${escapeHTML(order.produit)}</p>
+      <p><strong>السعر:</strong> ${escapeHTML(order.prix ?? 0)} دج</p>
+      <p><strong>نوع الخدمة:</strong> ${escapeHTML(order.type_service)}</p>
+      <p><strong>مكان الاستلام:</strong> ${escapeHTML(order.lieu_retrait)}</p>
+      <p><strong>عنوان التسليم:</strong> ${escapeHTML(order.adresse_livraison || order.adresse)}</p>
+      <p><strong>منطقة التوصيل:</strong> ${escapeHTML(order.zone)}</p>
+      <p><strong>تفاصيل إضافية:</strong> ${escapeHTML(order.details)}</p>
+      <p><strong>تاريخ الطلب:</strong> ${formatDate(order.created_at)}</p>
+      <p>الحالة الحالية: <span class="status">${escapeHTML(order.statut || "جديد")}</span></p>
+      <label for="status-${escapeHTML(order.id)}">تغيير حالة الطلب:</label>
+      <select id="status-${escapeHTML(order.id)}">
+        <option value="جديد">جديد</option>
+        <option value="قيد التوصيل">قيد التوصيل</option>
+        <option value="تم التسليم">تم التسليم</option>
+        <option value="ملغى">ملغى</option>
+      </select>
+      <button type="button" class="saveStatus">حفظ الحالة</button>
+      <p class="small saveMessage" role="status"></p>
+    `;
+
+    const select = card.querySelector("select");
+    select.value = ["جديد", "قيد التوصيل", "تم التسليم", "ملغى"].includes(order.statut)
+      ? order.statut
+      : "جديد";
+
+    card.querySelector(".saveStatus").addEventListener("click", async function() {
+      const saveMessage = card.querySelector(".saveMessage");
+      const newStatus = select.value;
+
+      this.disabled = true;
+      saveMessage.textContent = "جارٍ الحفظ...";
+
+      const { error: updateError } = await db
+        .from("commandes")
+        .update({ statut: newStatus })
+        .eq("id", order.id);
+
+      this.disabled = false;
+
+      if (updateError) {
+        saveMessage.textContent = "فشل الحفظ. تحقق من صلاحيات المدير.";
+        return;
+      }
+
+      saveMessage.textContent = "تم حفظ الحالة بنجاح ✅";
+      card.querySelector(".status").textContent = newStatus;
+      order.statut = newStatus;
+    });
+
+    ordersBox.appendChild(card);
+  });
+}
+
+document.getElementById("refreshBtn").addEventListener("click", loadOrders);
+
+document.getElementById("logoutBtn").addEventListener("click", async function() {
+  await db.auth.signOut();
+  ordersBox.replaceChildren();
+  loginMessage.textContent = "تم تسجيل الخروج.";
+  showLogin();
+});
+
+async function checkSession() {
+  const { data: { session } } = await db.auth.getSession();
+
+  if (!session) {
+    showLogin();
+    return;
+  }
+
+  if (session.user.id !== ADMIN_UID) {
+    await db.auth.signOut();
+    showLogin();
+    loginMessage.textContent = "هذا الحساب غير مخوّل للدخول.";
+    return;
+  }
+
+  showDashboard(session.user);
+  await loadOrders();
+}
+
+checkSession();
+</script>
 </body>
-      </html>
+</html>
