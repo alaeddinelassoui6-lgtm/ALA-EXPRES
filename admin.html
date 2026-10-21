@@ -197,7 +197,10 @@ async function loadOrders() {
       <p><strong>الزبون:</strong> ${escapeHTML(order.nom_client)}</p>
       <p><strong>الهاتف:</strong> ${escapeHTML(order.telephone)}</p>
       <p><strong>المنتج أو الطلب:</strong> ${escapeHTML(order.produit)}</p>
-      <p><strong>السعر:</strong> ${escapeHTML(order.prix ?? 0)} دج</p>
+<p><strong>السعر (دج):</strong></p>
+<input type="number" class="priceInput" min="0" value="${Number(order.prix) || 0}" style="width:130px;padding:8px">
+<button type="button" class="savePrice">💾 حفظ السعر</button>
+<p class="priceMessage" role="status"></p>
       <p><strong>نوع الخدمة:</strong> ${escapeHTML(order.type_service)}</p>
       <p><strong>مكان الاستلام:</strong> ${escapeHTML(order.lieu_retrait)}</p>
       <p><strong>عنوان التسليم:</strong> ${escapeHTML(order.adresse_livraison || order.adresse)}</p>
@@ -244,8 +247,34 @@ async function loadOrders() {
       card.querySelector(".status").textContent = newStatus;
       order.statut = newStatus;
     });
+        card.querySelector(".savePrice").addEventListener("click", async function() {
+      const priceInput = card.querySelector(".priceInput");
+      const priceMessage = card.querySelector(".priceMessage");
+      const newPrice = Number(priceInput.value);
 
-    ordersBox.appendChild(card);
+      if (priceInput.value.trim() === "" || !Number.isFinite(newPrice) || newPrice < 0) {
+        priceMessage.textContent = "أدخل سعرًا صحيحًا.";
+        return;
+      }
+
+      this.disabled = true;
+      priceMessage.textContent = "جارٍ حفظ السعر...";
+
+      const { error: priceError } = await db
+        .from("commandes")
+        .update({ prix: newPrice })
+        .eq("id", order.id);
+
+      this.disabled = false;
+
+      if (priceError) {
+        priceMessage.textContent = "فشل حفظ السعر. تحقق من صلاحيات المدير.";
+        return;
+      }
+
+      order.prix = newPrice;
+      priceMessage.textContent = "تم حفظ السعر بنجاح ✅";
+    });
   });
 }
 
