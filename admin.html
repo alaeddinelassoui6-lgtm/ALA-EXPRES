@@ -6,84 +6,217 @@
 <meta name="theme-color" content="#111111">
 <title>ALA EXPRESS - لوحة الإدارة</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
+
 body{
-  margin:0;padding:16px;background:#111;color:#fff;
-  font-family:Arial,sans-serif
+  margin:0;
+  padding:16px;
+  background:#111;
+  color:#fff;
+  font-family:Arial,sans-serif;
 }
-.container{max-width:1000px;margin:auto}
-header{text-align:center;padding:22px;border-bottom:2px solid #c9a227}
-h1,h2{color:#d6b54a}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+}
+
+h1{
+  text-align:center;
+  color:#d6b54a;
+}
+
+.subtitle{
+  text-align:center;
+  color:#ccc;
+  margin-bottom:25px;
+}
+
 .card{
-  background:#1d1d1d;border:1px solid #393939;
-  border-radius:12px;padding:18px;margin-top:18px
+  background:#1c1c1c;
+  border:1px solid #444;
+  border-radius:12px;
+  padding:18px;
+  margin-bottom:18px;
 }
-input,select{
-  display:block;width:100%;padding:12px;margin:10px 0;
-  border-radius:8px;border:1px solid #555;
-  background:#111;color:#fff;font-size:16px
+
+input,select,textarea{
+  display:block;
+  width:100%;
+  padding:12px;
+  margin:9px 0;
+  border-radius:7px;
+  border:1px solid #555;
+  background:#292929;
+  color:#fff;
+  font-size:15px;
 }
-button,a{
-  display:inline-block;padding:12px 16px;margin:5px 0;
-  border:0;border-radius:8px;background:#c9a227;
-  color:#111;font-weight:bold;text-decoration:none;cursor:pointer
+
+textarea{
+  min-height:70px;
+  resize:vertical;
 }
-.secondary{background:#333;color:#fff}
-.notice{line-height:1.8;color:#f1d77a}
+
+button{
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  border:0;
+  border-radius:7px;
+  background:#c9a227;
+  color:#111;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.5;
+  cursor:wait;
+}
+
+.logout{
+  background:#922;
+  color:#fff;
+}
+
+.refresh{
+  background:#087f5b;
+  color:#fff;
+}
+
+.hidden{
+  display:none!important;
+}
+
+#message{
+  padding:12px;
+  border-radius:7px;
+  margin:12px 0;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
 .order{
-  background:#292929;border:1px solid #555;
-  border-radius:10px;padding:15px;margin:12px 0;
-  overflow-wrap:anywhere
+  border:1px solid #555;
+  border-radius:10px;
+  padding:15px;
+  margin:15px 0;
+  background:#222;
 }
-.order p{line-height:1.7;margin:7px 0}
-.status{color:#f1d77a;font-weight:bold}
-.small{color:#bbb;font-size:13px}
-.hidden{display:none}
-#message{line-height:1.8}
-footer{text-align:center;color:#aaa;margin:25px}
+
+.order h3{
+  color:#d6b54a;
+  margin-top:0;
+}
+
+.info{
+  line-height:1.9;
+  overflow-wrap:anywhere;
+}
+
+.label{
+  color:#d6b54a;
+  font-weight:bold;
+}
+
+.empty{
+  text-align:center;
+  color:#ccc;
+  padding:20px;
+}
+
+.small{
+  font-size:13px;
+  color:#bbb;
+}
+
+@media(min-width:700px){
+  .order-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<header>
-  <h1>ALA EXPRESS 🚚</h1>
-  <p>لوحة إدارة طلبات التوصيل</p>
-</header>
+<h1>ALA EXPRESS</h1>
+<div class="subtitle">لوحة إدارة طلبات التوصيل</div>
 
-<section class="card" id="loginBox">
-  <h2>🔐 تسجيل دخول المدير</h2>
-  <p class="notice">سجّل الدخول بالبريد الإلكتروني وكلمة المرور التي أنشأتهما في Supabase.</p>
+<div id="message" class="hidden"></div>
+
+<section id="loginBox" class="card">
+  <h2>تسجيل دخول الإدارة</h2>
 
   <form id="loginForm">
-    <input id="email" type="email" placeholder="البريد الإلكتروني" required autocomplete="username">
-    <input id="password" type="password" placeholder="كلمة المرور" required autocomplete="current-password">
-    <button type="submit">تسجيل الدخول</button>
+    <input
+      id="email"
+      type="email"
+      placeholder="البريد الإلكتروني"
+      autocomplete="username"
+      required
+    >
+
+    <input
+      id="password"
+      type="password"
+      placeholder="كلمة المرور"
+      autocomplete="current-password"
+      required
+    >
+
+    <button id="loginButton" type="submit">
+      تسجيل الدخول
+    </button>
   </form>
-  <p id="loginMessage" role="status"></p>
 </section>
 
-<section class="card hidden" id="dashboard">
-  <h2>📦 طلبات الزبائن</h2>
-  <p id="welcome"></p>
-  <button id="refreshBtn">تحديث الطلبات</button>
-  <button id="logoutBtn" class="secondary">تسجيل الخروج</button>
-  <p id="message" role="status">جارٍ تحميل الطلبات...</p>
-  <div id="orders"></div>
+<section id="dashboard" class="hidden">
+
+  <div class="card">
+    <h2>إدارة الطلبات</h2>
+
+    <p>
+      عدد الطلبات:
+      <strong id="orderCount">0</strong>
+    </p>
+
+    <button id="refreshButton" class="refresh">
+      تحديث الطلبات
+    </button>
+
+    <button id="logoutButton" class="logout">
+      تسجيل الخروج
+    </button>
+  </div>
+
+  <div id="orders">
+    <p class="empty">جارٍ تحميل الطلبات...</p>
+  </div>
+
 </section>
 
-<footer>ALA EXPRESS © 2026</footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-const SUPABASE_URL = "https://iqwabjdyshtvhnukylta.supabase.co";
-const SUPABASE_KEY = "sb_publishable_pdCkpWQBZyrK_0loE6T7kw_80dH0SzB";
+"use strict";
 
-const ADMIN_UID = "7a5e085a-36c8-4e47-af5e-baa0baa6ca66";
+/* إعداد الاتصال بقاعدة البيانات */
+const SUPABASE_URL =
+  "https://iqwabjdyshtvhnukylta.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_pdCkpWQBZyrK_0loE6T7kw_80dH0SzB";
+
+const ADMIN_UID =
+  "7a5e085a-36c8-4e47-af5e-baa0baa6ca66";
 
 const db = window.supabase.createClient(
   SUPABASE_URL,
@@ -92,221 +225,362 @@ const db = window.supabase.createClient(
 
 const loginBox = document.getElementById("loginBox");
 const dashboard = document.getElementById("dashboard");
-const loginMessage = document.getElementById("loginMessage");
-const message = document.getElementById("message");
+const messageBox = document.getElementById("message");
 const ordersBox = document.getElementById("orders");
+const orderCount = document.getElementById("orderCount");
+const loginButton = document.getElementById("loginButton");
+const refreshButton = document.getElementById("refreshButton");
 
-function showLogin() {
-  loginBox.classList.remove("hidden");
-  dashboard.classList.add("hidden");
+function showMessage(text, error = false) {
+  messageBox.textContent = text;
+  messageBox.style.background = error ? "#642020" : "#174d35";
+  messageBox.classList.remove("hidden");
 }
 
-function showDashboard(user) {
+function hideMessage() {
+  messageBox.classList.add("hidden");
+}
+
+function showDashboard() {
   loginBox.classList.add("hidden");
   dashboard.classList.remove("hidden");
-  document.getElementById("welcome").textContent =
-    "مرحبًا بك في إدارة ALA EXPRESS";
 }
 
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, function(c) {
-    return {
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
-    }[c];
-  });
+function showLogin() {
+  dashboard.classList.add("hidden");
+  loginBox.classList.remove("hidden");
+}
+
+function addText(parent, tag, text, className = "") {
+  const element = document.createElement(tag);
+  element.textContent = text ?? "غير محدد";
+
+  if (className) {
+    element.className = className;
+  }
+
+  parent.appendChild(element);
+  return element;
+}
+
+function addField(parent, label, value) {
+  const line = document.createElement("div");
+  line.className = "info";
+
+  const title = document.createElement("span");
+  title.className = "label";
+  title.textContent = label + ": ";
+
+  const content = document.createElement("span");
+  content.textContent =
+    value === null || value === undefined || value === ""
+      ? "غير محدد"
+      : String(value);
+
+  line.append(title, content);
+  parent.appendChild(line);
 }
 
 function formatDate(value) {
   if (!value) return "غير محدد";
+
   const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? escapeHTML(value)
-    : date.toLocaleString("ar-DZ");
+
+  if (Number.isNaN(date.getTime())) {
+    return String(value);
+  }
+
+  return date.toLocaleString("ar-DZ");
 }
 
-document.getElementById("loginForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  loginMessage.textContent = "جارٍ تسجيل الدخول...";
+/* تسجيل الدخول */
+document.getElementById("loginForm")
+.addEventListener("submit", async function(event) {
+  event.preventDefault();
+  hideMessage();
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+  loginButton.disabled = true;
+  loginButton.textContent = "جارٍ تسجيل الدخول...";
 
-  const { data, error } = await db.auth.signInWithPassword({
-    email,
-    password
-  });
+  try {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-  if (error) {
-    loginMessage.textContent =
-      "تعذّر تسجيل الدخول. تحقق من البريد وكلمة المرور ثم أعد المحاولة.";
-    return;
-  }
+    const { data, error } = await db.auth.signInWithPassword({
+      email,
+      password
+    });
 
-  if (data.user.id !== ADMIN_UID) {
-    await db.auth.signOut();
-    loginMessage.textContent =
-      "هذا الحساب غير مخوّل للدخول إلى لوحة الإدارة.";
-    return;
-  }
+    if (error) throw error;
 
-  loginMessage.textContent = "";
-  showDashboard(data.user);
-  await loadOrders();
-});
+    if (!data.user || data.user.id !== ADMIN_UID) {
+      await db.auth.signOut();
 
-async function loadOrders() {
-  message.textContent = "جارٍ تحميل الطلبات...";
-  ordersBox.replaceChildren();
+      throw new Error(
+        "هذا الحساب غير مخوّل لدخول لوحة الإدارة."
+      );
+    }
 
-  const { data: { user }, error: authError } = await db.auth.getUser();
+    showDashboard();
+    showMessage("تم تسجيل الدخول بنجاح.");
+    await loadOrders();
 
-  if (authError || !user || user.id !== ADMIN_UID) {
-    message.textContent = "انتهت الجلسة أو لا تملك صلاحية الإدارة. سجّل الدخول مجددًا.";
+  } catch (error) {
     showLogin();
-    return;
+    showMessage(
+      "تعذّر تسجيل الدخول: " + error.message,
+      true
+    );
+  } finally {
+    loginButton.disabled = false;
+    loginButton.textContent = "تسجيل الدخول";
   }
-
-  const { data, error } = await db
-    .from("commandes")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    message.textContent =
-      "تعذّر تحميل الطلبات. تحقق من اتصال الإنترنت وصلاحيات قاعدة البيانات.";
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    message.textContent = "لا توجد طلبات حتى الآن.";
-    return;
-  }
-
-  message.textContent = "عدد الطلبات: " + data.length;
-
-  data.forEach(function(order) {
-    const card = document.createElement("article");
-    card.className = "order";
-
-    card.innerHTML = `
-      <h3>📦 الطلب رقم ${escapeHTML(order.id)}</h3>
-      <p><strong>الزبون:</strong> ${escapeHTML(order.nom_client)}</p>
-      <p><strong>الهاتف:</strong> ${escapeHTML(order.telephone)}</p>
-      <p><strong>المنتج أو الطلب:</strong> ${escapeHTML(order.produit)}</p>
-<p><strong>السعر (دج):</strong></p>
-<input type="number" class="priceInput" min="0" value="${Number(order.prix) || 0}" style="width:130px;padding:8px">
-<button type="button" class="savePrice">💾 حفظ السعر</button>
-<p class="priceMessage" role="status"></p>
-      <p><strong>نوع الخدمة:</strong> ${escapeHTML(order.type_service)}</p>
-      <p><strong>مكان الاستلام:</strong> ${escapeHTML(order.lieu_retrait)}</p>
-      <p><strong>عنوان التسليم:</strong> ${escapeHTML(order.adresse_livraison || order.adresse)}</p>
-      <p><strong>منطقة التوصيل:</strong> ${escapeHTML(order.zone)}</p>
-      <p><strong>تفاصيل إضافية:</strong> ${escapeHTML(order.details)}</p>
-      <p><strong>تاريخ الطلب:</strong> ${formatDate(order.created_at)}</p>
-      <p>الحالة الحالية: <span class="status">${escapeHTML(order.statut || "جديد")}</span></p>
-      <label for="status-${escapeHTML(order.id)}">تغيير حالة الطلب:</label>
-      <select id="status-${escapeHTML(order.id)}">
-        <option value="جديد">جديد</option>
-        <option value="قيد التوصيل">قيد التوصيل</option>
-        <option value="تم التسليم">تم التسليم</option>
-        <option value="ملغى">ملغى</option>
-      </select>
-      <button type="button" class="saveStatus">حفظ الحالة</button>
-      <p class="small saveMessage" role="status"></p>
-    `;
-
-    const select = card.querySelector("select");
-    select.value = ["جديد", "قيد التوصيل", "تم التسليم", "ملغى"].includes(order.statut)
-      ? order.statut
-      : "جديد";
-
-    card.querySelector(".saveStatus").addEventListener("click", async function() {
-      const saveMessage = card.querySelector(".saveMessage");
-      const newStatus = select.value;
-
-      this.disabled = true;
-      saveMessage.textContent = "جارٍ الحفظ...";
-
-      const { error: updateError } = await db
-        .from("commandes")
-        .update({ statut: newStatus })
-        .eq("id", order.id);
-
-      this.disabled = false;
-
-      if (updateError) {
-        saveMessage.textContent = "فشل الحفظ. تحقق من صلاحيات المدير.";
-        return;
-      }
-
-      saveMessage.textContent = "تم حفظ الحالة بنجاح ✅";
-      card.querySelector(".status").textContent = newStatus;
-      order.statut = newStatus;
-    });
-        card.querySelector(".savePrice").addEventListener("click", async function() {
-      const priceInput = card.querySelector(".priceInput");
-      const priceMessage = card.querySelector(".priceMessage");
-      const newPrice = Number(priceInput.value);
-
-      if (priceInput.value.trim() === "" || !Number.isFinite(newPrice) || newPrice < 0) {
-        priceMessage.textContent = "أدخل سعرًا صحيحًا.";
-        return;
-      }
-
-      this.disabled = true;
-      priceMessage.textContent = "جارٍ حفظ السعر...";
-
-      const { error: priceError } = await db
-        .from("commandes")
-        .update({ prix: newPrice })
-        .eq("id", order.id);
-
-      this.disabled = false;
-
-      if (priceError) {
-        priceMessage.textContent = "فشل حفظ السعر. تحقق من صلاحيات المدير.";
-        return;
-      }
-
-      order.prix = newPrice;
-      priceMessage.textContent = "تم حفظ السعر بنجاح ✅";
-    });
-  });
-}
-
-document.getElementById("refreshBtn").addEventListener("click", loadOrders);
-
-document.getElementById("logoutBtn").addEventListener("click", async function() {
-  await db.auth.signOut();
-  ordersBox.replaceChildren();
-  loginMessage.textContent = "تم تسجيل الخروج.";
-  showLogin();
 });
 
+/* التحقق من جلسة الإدارة */
 async function checkSession() {
-  const { data: { session } } = await db.auth.getSession();
+  try {
+    const { data, error } = await db.auth.getSession();
 
-  if (!session) {
+    if (error) throw error;
+
+    const user = data.session?.user;
+
+    if (user && user.id === ADMIN_UID) {
+      showDashboard();
+      await loadOrders();
+    } else {
+      showLogin();
+    }
+
+  } catch (error) {
     showLogin();
-    return;
+    showMessage(
+      "تعذّر التحقق من تسجيل الدخول: " + error.message,
+      true
+    );
   }
-
-  if (session.user.id !== ADMIN_UID) {
-    await db.auth.signOut();
-    showLogin();
-    loginMessage.textContent = "هذا الحساب غير مخوّل للدخول.";
-    return;
-  }
-
-  showDashboard(session.user);
-  await loadOrders();
 }
 
+/* جلب الطلبات */
+async function loadOrders() {
+  hideMessage();
+
+  refreshButton.disabled = true;
+  refreshButton.textContent = "جارٍ تحديث الطلبات...";
+
+  ordersBox.replaceChildren();
+
+  addText(
+    ordersBox,
+    "p",
+    "جارٍ تحميل الطلبات...",
+    "empty"
+  );
+
+  try {
+    const { data, error } = await db
+      .from("commandes")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    ordersBox.replaceChildren();
+    orderCount.textContent = String(data.length);
+
+    if (data.length === 0) {
+      addText(
+        ordersBox,
+        "p",
+        "لا توجد طلبات حتى الآن.",
+        "empty"
+      );
+      return;
+    }
+
+    data.forEach(function(order) {
+      renderOrder(order);
+    });
+
+  } catch (error) {
+    ordersBox.replaceChildren();
+
+    addText(
+      ordersBox,
+      "p",
+      "تعذّر تحميل الطلبات: " + error.message,
+      "empty"
+    );
+
+    showMessage(
+      "تحقّق من صلاحيات قراءة جدول commandes في Supabase.",
+      true
+    );
+
+  } finally {
+    refreshButton.disabled = false;
+    refreshButton.textContent = "تحديث الطلبات";
+  }
+}
+
+/* عرض تفاصيل كل طلب */
+function renderOrder(order) {
+  const card = document.createElement("article");
+  card.className = "order";
+
+  addText(
+    card,
+    "h3",
+    "طلب رقم: " + String(order.id)
+  );
+
+  const grid = document.createElement("div");
+  grid.className = "order-grid";
+
+  const details = document.createElement("div");
+
+  addField(details, "اسم العميل", order.nom_client);
+  addField(details, "رقم الهاتف", order.telephone);
+  addField(details, "نوع الخدمة", order.type_service);
+  addField(details, "منطقة التوصيل", order.zone);
+  addField(details, "مكان الاستلام", order.lieu_retrait);
+  addField(
+    details,
+    "عنوان التوصيل",
+    order.adresse_livraison || order.adresse
+  );
+  addField(details, "المنتج أو الطلب", order.produit);
+  addField(details, "تفاصيل إضافية", order.details);
+  addField(details, "تاريخ الطلب", formatDate(order.created_at));
+
+  const controls = document.createElement("div");
+
+  addText(controls, "label", "سعر الطلب");
+
+  const priceInput = document.createElement("input");
+  priceInput.type = "number";
+  priceInput.min = "0";
+  priceInput.step = "any";
+  priceInput.placeholder = "أدخل السعر";
+  priceInput.value =
+    order.prix === null || order.prix === undefined
+      ? ""
+      : String(order.prix);
+
+  controls.appendChild(priceInput);
+
+  addText(controls, "label", "حالة الطلب");
+
+  const statusSelect = document.createElement("select");
+
+  const statuses = [
+    ["جديد", "جديد"],
+    ["قيد التوصيل", "قيد التوصيل"],
+    ["تم التسليم", "تم التسليم"],
+    ["ملغى", "ملغى"]
+  ];
+
+  statuses.forEach(function(item) {
+    const option = document.createElement("option");
+    option.value = item[0];
+    option.textContent = item[1];
+    statusSelect.appendChild(option);
+  });
+
+  const currentStatus = order.statut || "جديد";
+
+  if (!statuses.some(item => item[0] === currentStatus)) {
+    const option = document.createElement("option");
+    option.value = currentStatus;
+    option.textContent = currentStatus;
+    statusSelect.appendChild(option);
+  }
+
+  statusSelect.value = currentStatus;
+  controls.appendChild(statusSelect);
+
+  const saveButton = document.createElement("button");
+  saveButton.textContent = "حفظ السعر والحالة";
+  controls.appendChild(saveButton);
+
+  saveButton.addEventListener("click", async function() {
+    hideMessage();
+
+    const priceText = priceInput.value.trim();
+
+    if (
+      priceText !== "" &&
+      (!Number.isFinite(Number(priceText)) ||
+       Number(priceText) < 0)
+    ) {
+      showMessage("أدخل سعرًا صحيحًا.", true);
+      return;
+    }
+
+    saveButton.disabled = true;
+    saveButton.textContent = "جارٍ الحفظ...";
+
+    try {
+      const updates = {
+        statut: statusSelect.value
+      };
+
+      updates.prix =
+        priceText === "" ? null : Number(priceText);
+
+      const { error } = await db
+        .from("commandes")
+        .update(updates)
+        .eq("id", order.id);
+
+      if (error) throw error;
+
+      showMessage(
+        "تم حفظ السعر والحالة للطلب رقم " + order.id
+      );
+
+    } catch (error) {
+      showMessage(
+        "تعذّر الحفظ: " + error.message,
+        true
+      );
+    } finally {
+      saveButton.disabled = false;
+      saveButton.textContent = "حفظ السعر والحالة";
+    }
+  });
+
+  grid.append(details, controls);
+  card.appendChild(grid);
+  ordersBox.appendChild(card);
+}
+
+/* تحديث الطلبات */
+refreshButton.addEventListener("click", loadOrders);
+
+/* تسجيل الخروج */
+document.getElementById("logoutButton")
+.addEventListener("click", async function() {
+  const { error } = await db.auth.signOut();
+
+  if (error) {
+    showMessage(
+      "تعذّر تسجيل الخروج: " + error.message,
+      true
+    );
+    return;
+  }
+
+  showLogin();
+  ordersBox.replaceChildren();
+  orderCount.textContent = "0";
+  showMessage("تم تسجيل الخروج.");
+});
+
+/* بدء التشغيل */
 checkSession();
 </script>
+
 </body>
-</html>
+  </html>
