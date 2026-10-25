@@ -526,8 +526,22 @@ function renderOrder(order) {
         statut: statusSelect.value
       };
 
-      updates.prix =
-        priceText === "" ? null : Number(priceText);
+  const { data, error } = await db
+  .from("commandes")
+  .update({
+    statut: statusSelect.value,
+    prix: priceText.trim() === "" ? null : Number(priceText)
+  })
+  .eq("id", order.id)
+  .select();
+
+if (error) {
+  alert("فشل الحفظ: " + error.message);
+} else if (!data || data.length === 0) {
+  alert("لم يتم تحديث الطلب. تحقق من صلاحيات التعديل.");
+} else {
+  alert("تم حفظ السعر والحالة للطلب رقم " + order.id);
+}
 
       const { error } = await db
         .from("commandes")
