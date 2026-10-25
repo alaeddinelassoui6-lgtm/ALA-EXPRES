@@ -246,7 +246,10 @@ form.addEventListener("submit", async function(event) {
         statut: "جديد"
       }]);
 
-    if (error) {
+  if (error) {
+  console.error("Supabase error:", error);
+  throw new Error(error.message);
+}
       throw error;
     }
 
