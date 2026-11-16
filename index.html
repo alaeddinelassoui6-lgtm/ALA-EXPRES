@@ -10,7 +10,20 @@
 
 <style>
 *{box-sizing:border-box}
-body{
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("./sw.js")
+      .then(function() {
+        console.log("ALA EXPRESS Service Worker registered");
+      })
+      .catch(function(error) {
+        console.error("Service Worker error:", error);
+      });
+  });
+}
+</script>
+  body{
   margin:0;
   font-family:Arial,sans-serif;
   background:#f3f7f5;
