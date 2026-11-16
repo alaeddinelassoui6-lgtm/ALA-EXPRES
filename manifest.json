@@ -1,13 +1,14 @@
 {
-"name": "ALA EXPRESS",
-"short_name": "ALA EXPRESS",
-"description": "خدمات التوصيل السريع والآمن",
-"lang": "ar",
-"dir": "rtl",
-"start_url": "./",
-"scope": "./",
-"display": "standalone",
-"orientation": "portrait",
-"background_color": "#ffffff",
-"theme_color": "#087f5b"
+  "name": "ALA EXPRESS",
+  "short_name": "ALA EXPRESS",
+  "id": "./",
+  "description": "خدمات التوصيل السريع والآمن",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#087f5b"
 }
